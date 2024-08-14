@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
@@ -16,15 +17,14 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.testcontainers.containers.KafkaContainer
 import java.time.Duration
 
-
-private const val topic = "input"
-
 @SpringBootTest(classes = [TestcontainersConfiguration::class])
 class ReadWrittenTest {
 
     @Autowired
     lateinit var kafkaContainer: KafkaContainer
 
+    @Value("\${spring.kafka.topics.greeting}")
+    lateinit var topic: String
     @BeforeEach
     fun setup() {
         kafkaContainer.start()
