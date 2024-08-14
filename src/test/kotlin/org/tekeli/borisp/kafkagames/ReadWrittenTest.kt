@@ -9,20 +9,22 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
-import org.testcontainers.containers.KafkaContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.kafka.KafkaContainer
+import org.testcontainers.utility.DockerImageName
 import java.time.Duration
 
-@SpringBootTest(classes = [TestcontainersConfiguration::class])
+@SpringBootTest
 class ReadWrittenTest {
 
-    @Autowired
-    lateinit var kafkaContainer: KafkaContainer
+    @Container
+    private var kafkaContainer: KafkaContainer =
+        KafkaContainer(DockerImageName.parse("apache/kafka-native:latest").asCompatibleSubstituteFor("apache/kafka"))
 
     @Value("\${spring.kafka.topics.greeting}")
     lateinit var topic: String
